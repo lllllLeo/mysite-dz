@@ -136,8 +136,10 @@ public class GuestBookRepository {
 		Connection conn = null;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mysql://192.168.254.30:3307/webdb?characterEncoding=utf8";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
+//			String url = "jdbc:mysql://192.168.254.30:3307/webdb?characterEncoding=utf8";
+//			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			String url = "jdbc:mysql://127.0.0.1:3306/bookmall_local";
+			conn = DriverManager.getConnection(url, "bookmall_local", "bookmall_local");
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
 		} 
