@@ -17,7 +17,6 @@ import com.douzone.web.Action;
 import com.douzone.web.util.MvcUtils;
 
 public class ListAction implements Action {
-	private static final int SHOW_MAX_PAGE = 5;
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		totalPage -> ceil(전체글 /3) ceil하면 +1안해도되너, firstPageNo, lastPageNo, nextPageNo = -1보다크면 11?, prevPageNo, currentPage (css먹이고, a링크빼고)     => Map에 넣고 setAttribute
@@ -25,32 +24,19 @@ public class ListAction implements Action {
 		List<Map<String, Object>> result = new ArrayList();
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		
-		
-//		int totalCount = result.size();
-//		int countPage = 10;
-//		int totalPage = (int) Math.ceil(totalCount / countPage); // 전체글 개수 /10
-//		int firstPageNo = (totalPage - 1) * SHOW_MAX_PAGE + 1;  // 1 6 11 16 21 (totalPage-1) * 5 + 1    , 5
-//		int lastPageNo = (totalPage - 1) * SHOW_MAX_PAGE + 5;   // 5 10 15 20 25    (totalPage - 1) * 5 + 5   없으면 회색
-//		int nextPageNo = lastPageNo + 1;   // 6 
-//		int prevPageNo = firstPageNo - 1;   //  firstPageNo == 1 ? 
-//		int currentPageNo = Integer.parseInt(page);  // 임시
-		
-		int totalCount = new BoardRepository().getBoardCount();
-		int countBoard= 10;
-		int countPage = 5;
-		int totalPage = (int) Math.ceil(totalCount / countBoard); // 전체글 개수 /10
-//		int startCount = (page - 1) * countBoard + 1;  // 1 6 11 16 21 (totalPage-1) * 5 + 1    , 5
-		int startCount = (page - 1) * countBoard;  // 1 6 11 16 21 (totalPage-1) * 5 + 1    , 5
-		int endCount = page * countBoard;   // 5 10 15 20 25    (totalPage - 1) * 5 + 5   없으면 회색
-		int firstPageNo = (((int) ((double) page / 10 + 0.9)) - 1) * countBoard + 1;
-		int lastPageNo = totalPage;
-//		int nextPageNo = endCount + 1;   // 6 
-//		int prevPageNo = startCount - 1;   //  firstPageNo == 1 ? 
-		int currentPageNo = page; 
-		if (lastPageNo > firstPageNo + 10 - 1) { // 마지막 페이지 번호가 
+		int totalCount = new BoardRepository().getBoardCount();   							// 글 전체 개수
+		int countBoard= 10;										  							// 글 10개 뽑음
+		int countPage = 5;										  							// 페이지 5개만 보이게
+		int totalPage = (int) Math.ceil(totalCount / countBoard); 							// 전체 페이지 개수
+		int startCount = (page - 1) * countBoard;  				  							// 쿼리 limit에서 사용할 startCount  
+		int endCount = page * countBoard;   					  							// 쿼리 limit에서 사용할 endCount      ex) limit startCount, endCount
+		int firstPageNo = (((int) ((double) page / 10 + 0.9)) - 1) * countBoard + 1;		// 첫 페이지 번호
+		int lastPageNo = totalPage;															// 마지막 페이지 번호
+		int currentPageNo = page; 															// 현재 페이지
+		if (lastPageNo > firstPageNo + 10 - 1) { 											// 마지막 페이지 번호를 설정해줌 
 			lastPageNo = firstPageNo + 10 - 1;
 		}
+		
 		result = new BoardRepository().getAllBoard(startCount, countBoard);
 		
 		map.put("totalCount", totalCount);
@@ -59,8 +45,6 @@ public class ListAction implements Action {
 		map.put("endCount", endCount);
 		map.put("firstPageNo", firstPageNo);
 		map.put("lastPageNo", lastPageNo);
-//		map.put("nextPageNo", nextPageNo);
-//		map.put("prevPageNo", prevPageNo);
 		map.put("currentPageNo", currentPageNo);
 		map.put("countPage", countPage);
 		map.put("countBoard", countBoard);

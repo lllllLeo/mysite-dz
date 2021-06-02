@@ -48,29 +48,6 @@
 						</tr>
 					</c:forEach>
 				</table>
-				
-				
-				
-<%-- 				<!-- pager 추가 -->
-				<div class="pager">
-					<ul>
-						<li><a href="/mysite02/board?page=${map.prevPageNo}">◀</a></li>
-							<c:forEach items="${map }" var="page" begin = "1" end = "${map.maxPage }"  varStatus="status">
-								<c:choose>
-									<c:when test="${map.firstPageNo + status.index - 1 ne map.page }">
-										<li><a href="/mysite02/board?page=${map.firstPageNo + status.index - 1 }">${map.firstPageNo + status.index - 1 }</a></li>
-									</c:when>
-									<c:otherwise>
-										<li class="selected">${map.firstPageNo + status.index - 1 }</li>
-									</c:otherwise>
-								</c:choose>
-								
-							</c:forEach>
-						<li><a href="/mysite02/board?page=${map.nextPageNo}">▶</a></li>
-					</ul>
-				</div>					
-				<!-- pager 추가 --> --%>
-				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
 						<c:choose>
