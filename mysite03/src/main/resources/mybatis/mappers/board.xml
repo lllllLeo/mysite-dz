@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<resultMap type="HashMap" id="boardMap">
+		<result property="no" column="no"/>
+		<result property="title" column="title"/>
+		<result property="depth" column="depth"/>
+		<result property="hit" column="hit"/>
+		<result property="reg_date" column="regDate"/>
+		<result property="no" column="userNo"/>
+		<result property="name" column="name"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="boardvo">
+	<![CDATA[
+		INSERT INTO
+			board 
+		VALUES 
+			(null, #{title }, #{contents }, now(), 0, IFNULL((SELECT (max(group_no) +1) FROM board b), 0), 1, 0, #{userNo })
+	]]>
+	</insert>
+	<insert id="replyInsert" parameterType="boardvo">
+	<![CDATA[
+		INSERT INTO 
+			board 
+		VALUES 
+			(null, #{title }, #{contents }, now(), 0, #{groupNo }, #{orderNo }, #{depth } + 1 , #{userNo })
+	]]>
+	</insert>
+	
+<!-- 	<select id="getAllBoard" parameterType="map" resultType="boardvo"> -->
+	<select id="getAllBoard" parameterType="map" resultMap="boardMap">
+	<![CDATA[
+		select 
+			a.no, a.title, a.depth, a.hit, a.reg_date, b.no as user_no, b.name 
+		from 
+			board a, user b 
+		where 
+			a.user_no = b.no 
+		order by 
+			a.group_no DESC, a.order_no asc 
+		limit 
+			#{startCount }, #{countBoard }
+	]]>
+	</select>
+	
+	
+	<select id="getViewDetail" parameterType="long" resultType="boardvo">
+	<![CDATA[
+		SELECT 
+			no, title, contents, group_no AS groupNo, order_no AS orderNo, depth, user_no AS userNo
+		FROM 
+			board 
+		WHERE 
+			no = #{no }
+	]]>
+	</select>
+	
+	<update id="replyUpdate" parameterType="boardvo">
+		UPDATE 
+			board 
+		SET 
+			order_no = order_no + 1 
+		WHERE group_no = #{groupNo } 
+			AND order_no >= #{orderNo }
+	</update>
+	
+	<update id="updateBoardByBoardNo" parameterType="boardvo">
+		UPDATE 
+			board 
+		SET 
+			title = #{title }, contents = #{contents } 
+		WHERE no = #{no }
+	</update>
+
+	<update id="updateHitCount" parameterType="long">
+		UPDATE 
+			board 
+		SET 
+			hit = hit + 1 
+		WHERE 
+			no = #{no }
+	</update>
+	
+	<select id="getBoardCount" resultType="int">
+		SELECT 
+			count(no) 
+		FROM 
+			board
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM 
+			board 
+		WHERE 
+			no = #{no }
+	</delete>
+	
+</mapper>
