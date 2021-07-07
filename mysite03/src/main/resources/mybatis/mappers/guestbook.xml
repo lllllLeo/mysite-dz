@@ -12,6 +12,27 @@
 		]]>
 	</select>
 	
+	<select id="findAllByNo" parameterType="long" resultType="guestbookvo">
+		SELECT	
+			no, name, message, reg_date AS regDate
+		FROM 
+			guestbook 
+
+			<if test = '_parameter > 0'>		
+				<![CDATA[
+					WHERE
+						no < #{_parameter}
+				]]>
+			</if>
+			
+		ORDER BY 
+			no desc
+		LIMIT
+			0,3
+	</select>
+	
+	
+	
 	<insert id="insert" parameterType="guestbookvo">
 		<![CDATA[
 		INSERT INTO 

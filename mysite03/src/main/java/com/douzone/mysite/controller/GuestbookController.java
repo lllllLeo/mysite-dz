@@ -14,7 +14,7 @@ import com.douzone.mysite.security.Auth;
 import com.douzone.mysite.service.GuestbookService;
 import com.douzone.mysite.vo.GuestBookVO;
 
-@Auth
+//@Auth
 @Controller
 @RequestMapping("/guestbook")
 public class GuestbookController {
@@ -46,6 +46,11 @@ public class GuestbookController {
 	public String delete(@PathVariable Long no, String password) {
 		guestbookService.deleteMessage(no, password);
 		return "redirect:/guestbook";
+	}
+	
+	@RequestMapping("/spa")
+	public String spaLanding() {
+		return "guestbook/spa-landing";
 	}
 
 	

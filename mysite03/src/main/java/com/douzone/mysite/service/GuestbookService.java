@@ -17,15 +17,19 @@ public class GuestbookService {
 	public List<GuestBookVO> getMessageList() {
 		return guestBookRepository.findAll();
 	}
+	
+	public List<GuestBookVO> getMessageList(Long no) { // no는 기준  no값이 안넘어오면 0을 줌(처음에 뽑아야하니까)   var no = 0 / 13 list?no=13 다음 누르면 이래넘어감  / append 맨 마지막 게시글 넘버를 var에 세팅
+		return guestBookRepository.findAll(no);
+	}
 
 	public void addMessage(GuestBookVO vo) {
 		guestBookRepository.insert(vo);
 	}
 	
-	public void deleteMessage(Long no, String password) {
+	public Boolean deleteMessage(Long no, String password) {
 		GuestBookVO vo = new GuestBookVO();
 		vo.setNo(no);
 		vo.setPassword(password);
-		guestBookRepository.delete(vo);
+		return guestBookRepository.delete(vo);
 	}
 }
